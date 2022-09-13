@@ -12,38 +12,47 @@ public class MeterialTest : MonoBehaviour
 
     private Material _material;
 
+    public static Action<string> ColorAction;
+
     public void ToRed(float time = 0.5f)
     {
+        ColorAction.Invoke("material.DOColor(Color.red)");
         _material.DOColor(Color.red, time);
     }
 
     public void ToOrange(float time = 0.5f)
     {
+        ColorAction.Invoke("material.DOColor(Color.orange)");
         _material.DOColor(_orange, time);
     }
     
     public void ToYellow(float time = 0.5f)
     {
+        ColorAction.Invoke("material.DOColor(Color.yellow)");
         _material.DOColor(Color.yellow, time);
     }
     
     public void ToGreen(float time = 0.5f)
     {
+        ColorAction.Invoke("material.DOColor(Color.green)");
         _material.DOColor(Color.green, time);
     }
     
     public void ToBlue(float time = 0.5f)
     {
+        ColorAction.Invoke("material.DOColor(Color.blue)");
         _material.DOColor(Color.blue, time);
     }
     
     public void ToNavy(float time = 0.5f)
     {
+        ColorAction.Invoke("material.DOColor(Color.navy)");
         _material.DOColor(_navy, time);
     }
     
     public void ToPurple(float time = 0.5f)
     {
+        ColorAction.Invoke("material.DOColor(Color.purple)");
         _material.DOColor(_purple, time);
     }
 

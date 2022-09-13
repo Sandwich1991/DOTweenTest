@@ -10,6 +10,18 @@ using Button = UnityEngine.UI.Button;
 
 public class UiController : MonoBehaviour
 {
+    public enum _uiState
+    {
+        None,
+        Transform,
+        Material,
+        Jump,
+        Move,
+        Color,
+        Fade,
+    }
+
+    public _uiState UIState = _uiState.None;
 
     [SerializeField] private ScrollRect _scrollRect;
     [SerializeField] private RectTransform _scrollviewRect;
@@ -23,24 +35,56 @@ public class UiController : MonoBehaviour
     [SerializeField] private RectTransform _moveUI;
     [SerializeField] private RectTransform _colorUI;
     [SerializeField] private RectTransform _fadeUI;
-    [SerializeField] private Text _command;
+    
 
     private bool _isMenuLoading = false;
 
     private Stack<RectTransform> _menus = new Stack<RectTransform>();
-    private Stack<string> _commandStack = new Stack<string>();
-    
-    void MenuFoward(RectTransform newMenu, string command)
+
+    private Stack<_uiState> _uiStateStack = new Stack<_uiState>();
+
+    public static Action<string> UIAction;
+
+    string GetStateName(_uiState state)
+    {
+        switch (state)
+        {
+            case _uiState.Transform:
+                return "transform";
+
+            case _uiState.Material:
+                return "material";
+            
+            case _uiState.Jump:
+                return "transform.DOJump()";
+            
+            case _uiState.Move:
+                return "transform.DOMove()";
+            
+            case _uiState.Color:
+                return "meterial.DOColor()";
+            
+            case _uiState.Fade:
+                return "meterial.DOFade()";
+        }
+
+        return "DOTween Simulator";
+    }
+
+    void MenuFoward(RectTransform newMenu)
     {
         if (_isMenuLoading == true)
             return;
         else
         {
             _isMenuLoading = true;
-            _commandStack.Push(command);
-            _command.DOText(_commandStack.Peek(), 0.8f);
             RectTransform originMenu = _menus.Peek();
+
             _menus.Push(newMenu);
+            
+            // 현재 uiState를 스택에 저장
+            _uiStateStack.Push(UIState);
+            UIAction.Invoke(GetStateName(_uiStateStack.Peek()));
 
             newMenu.DOAnchorPosX(newMenu.rect.width + 100f, 0.1f)
                 .OnComplete(() =>newMenu.gameObject.SetActive(true));
@@ -66,11 +110,12 @@ public class UiController : MonoBehaviour
         {
             _isMenuLoading = true;
 
-            _commandStack.Pop();
-            _command.DOText(_commandStack.Peek(), 0.5f);
-            
             RectTransform originMenu = _menus.Pop();
             RectTransform newMenu = _menus.Peek();
+            
+            // 이전 state를 스택에서 pop
+            _uiStateStack.Pop();
+            UIAction.Invoke(GetStateName(_uiStateStack.Peek()));
         
             newMenu.DOAnchorPosX(-newMenu.rect.width - 100f, 0.1f)
                 .OnComplete(() => newMenu.gameObject.SetActive(true));
@@ -91,33 +136,38 @@ public class UiController : MonoBehaviour
     
     public void ToTransformMenu()
     {
-        MenuFoward(_transformUI, "transform");
-        
+        UIState = _uiState.Transform;
+        MenuFoward(_transformUI);
     }
     
     public void ToMaterialMenu()
     {
-        MenuFoward(_materialUI, "material");
+        UIState = _uiState.Material;
+        MenuFoward(_materialUI);
     }
     
     public void ToJumpMenu()
     {
-        MenuFoward(_jumpUI, "transform.DOJump()");
+        UIState = _uiState.Jump;
+        MenuFoward(_jumpUI);
     }
     
     public void ToMoveMenu()
     {
-        MenuFoward(_moveUI, "transform.DOMove()");
+        UIState = _uiState.Move;
+        MenuFoward(_moveUI);
     }
     
     public void ToColorMenu()
     {
-        MenuFoward(_colorUI, "material.DOColor()");
+        UIState = _uiState.Color;
+        MenuFoward(_colorUI);
     }
     
     public void ToFadeMenu()
     {
-        MenuFoward(_fadeUI, "material.DOFade()");
+        UIState = _uiState.Fade;
+        MenuFoward(_fadeUI);
     }
     
     public void ToReturn()
@@ -131,7 +181,7 @@ public class UiController : MonoBehaviour
         _scrollRect.content = _mainUI;
         _transformUI.gameObject.SetActive(false);
         _menus.Push(_mainUI);
-        _commandStack.Push("DOTween Simulator");
-        _command.DOText(_commandStack.Peek(), 0.7f).SetDelay(0.5f);
+        
+        _uiStateStack.Push(UIState);
     }
 }
