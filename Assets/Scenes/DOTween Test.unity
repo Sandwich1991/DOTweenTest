@@ -1600,8 +1600,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 739312201a9c79b448397991c8097ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UIState: 0
   _scrollRect: {fileID: 1526292345}
+  _scrollviewRect: {fileID: 0}
   _viewPort: {fileID: 984592935}
+  _menuButton: {fileID: 0}
   _mainUI: {fileID: 1564325781}
   _transformUI: {fileID: 397907106}
   _materialUI: {fileID: 1462653667}
@@ -1609,7 +1612,6 @@ MonoBehaviour:
   _moveUI: {fileID: 1466267658}
   _colorUI: {fileID: 1490736273}
   _fadeUI: {fileID: 17075290}
-  _command: {fileID: 650714068}
 --- !u!1 &379840396
 GameObject:
   m_ObjectHideFlags: 0
@@ -2763,6 +2765,7 @@ GameObject:
   - component: {fileID: 650714070}
   - component: {fileID: 650714069}
   - component: {fileID: 650714068}
+  - component: {fileID: 650714071}
   m_Layer: 5
   m_Name: Command
   m_TagString: Untagged
@@ -2832,6 +2835,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 150}
   m_SizeDelta: {x: 900, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &650714071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 650714067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dbf655ba081fb34385cd14f191da0bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _command: {fileID: 650714068}
 --- !u!1 &661146630
 GameObject:
   m_ObjectHideFlags: 0
